@@ -1,0 +1,48 @@
+form {
+    display: flex;
+    flex-direction: column;
+}
+body {
+    background-color:rgb(184, 204, 240);
+    font-family: "Noto Sans", sans-serif;
+}
+
+input[type="text"], input[type="password"] {
+    width: 40%;
+}
+
+input[type="submit"] {
+    width: 35%;
+}
+
+label {
+    font-size: 1.1rem;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+}
+
+.sgu-logo {
+    width: 10%;
+}
+
+.title {
+    width: 100%;
+    text-align: center;
+    font-size: 2.1rem;
+}
+
+.submit {
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+
+
