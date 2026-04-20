@@ -50,18 +50,33 @@ def debug_token():
     all_info = oidc.user_getinfo(['openid'])
     return jsonify(all_info)
 
-@app.route('/student')
-def student():
-    user_info = oidc.user_getinfo(['preferred_username', 'name', 'email'])
-    return render_template('student.html')
+@app.route('/protected')
+@oidc.require_login
+def protected():
+    user_info = oidc.user_getinfo(['groups'])
+    user_groups = user_info.get('groups', [])
+    
+    if 'students' in user_groups:
+        return redirect(url_for('student'))
+    elif 'faculty' in user_groups:
+        return redirect(url_for('faculty'))
+    elif 'admins' in user_groups:
+        return redirect(url_for('admin'))
+    else:
+        return redirect(url_for('home'))
 
-@app.route('/faculty')
-def faculty():
-    return render_template('faculty.html')
+# @app.route('/student')
+# def student():
+#     user_info = oidc.user_getinfo(['preferred_username', 'name', 'email'])
+#     return render_template('student.html')
 
-@app.route('/admin')
-def admin():
-    return render_template('admin.html')
+# @app.route('/faculty')
+# def faculty():
+#     return render_template('faculty.html')
+
+# @app.route('/admin')
+# def admin():
+#     return render_template('admin.html')
 
 @app.route('/logout')
 def logout():
