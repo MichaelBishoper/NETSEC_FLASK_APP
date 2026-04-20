@@ -34,7 +34,8 @@ app.config.update({
     'OIDC_USER_INFO_ENABLED': True,
     'OIDC_SCOPES': ['openid', 'email', 'profile'],
     'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post',
-    'OVERWRITE_REDIRECT_URI': f"{os.getenv("CALLBACK_URL")}"
+    'OIDC_CALLBACK_ROUTE': '/oidc/callback',
+    'OVERWRITE_REDIRECT_URI': f"{os.getenv("CALLBACK_URL")}",
 })
 
 oidc = OpenIDConnect(app)
