@@ -35,7 +35,7 @@ app.config.update({
     'OIDC_SCOPES': ['openid', 'email', 'profile'],
     'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post',
     'OIDC_CALLBACK_ROUTE': '/oidc/callback',
-    'OVERWRITE_REDIRECT_URI': f"{os.getenv("CALLBACK_URL")}",
+    'OIDC_OVERWRITE_REDIRECT_URI': f"{os.getenv('CALLBACK_URL')}",
 })
 
 oidc = OpenIDConnect(app)
@@ -46,11 +46,18 @@ oidc = OpenIDConnect(app)
 def home():
     return render_template('index.html')
 
-@app.route('/debug')
+@app.route('/debug-groups')
 @oidc.require_login
-def debug_token():
-    all_info = oidc.user_getinfo(['openid'])
-    return jsonify(all_info)
+def debug_groups():
+    user_info = oidc.user_getinfo(['groups', 'preferred_username', 'email'])
+    return f"""
+    <h1>Debug Info</h1>
+    <p>User: {user_info.get('preferred_username', 'Not found')}</p>
+    <p>Email: {user_info.get('email', 'Not found')}</p>
+    <p>Groups: {user_info.get('groups', 'Not found - empty or missing')}</p>
+    <p>Full user_info: {user_info}</p>
+    <a href="/protected">Back to protected</a>
+    """
 
 @app.route('/protected')
 @oidc.require_login
@@ -58,27 +65,34 @@ def protected():
     user_info = oidc.user_getinfo(['groups'])
     user_groups = user_info.get('groups', [])
     
+    print(f"User groups: {user_groups}")
+    
     if 'students' in user_groups:
+        print("Redirecting to student")
         return redirect(url_for('student'))
     elif 'faculty' in user_groups:
+        print("Redirecting to faculty")
         return redirect(url_for('faculty'))
     elif 'admins' in user_groups:
+        print("Redirecting to admin")
         return redirect(url_for('admin'))
     else:
+        print(f"No matching group found. Groups: {user_groups}")
+        print("Redirecting to home")
         return redirect(url_for('home'))
 
-# @app.route('/student')
-# def student():
-#     user_info = oidc.user_getinfo(['preferred_username', 'name', 'email'])
-#     return render_template('student.html')
+@app.route('/student')
+def student():
+    user_info = oidc.user_getinfo(['preferred_username', 'name', 'email'])
+    return render_template('student.html')
 
-# @app.route('/faculty')
-# def faculty():
-#     return render_template('faculty.html')
+@app.route('/faculty')
+def faculty():
+    return render_template('faculty.html')
 
-# @app.route('/admin')
-# def admin():
-#     return render_template('admin.html')
+@app.route('/admin')
+def admin():
+    return render_template('admin.html')
 
 @app.route('/logout')
 def logout():
