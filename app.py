@@ -16,6 +16,7 @@ client_secrets = {
         "auth_uri": f"{os.getenv('KEYCLOAK_SERVER')}/realms/{os.getenv('KEYCLOAK_REALM')}/protocol/openid-connect/auth",
         "token_uri": f"{os.getenv('KEYCLOAK_SERVER')}/realms/{os.getenv('KEYCLOAK_REALM')}/protocol/openid-connect/token",
         "userinfo_uri": f"{os.getenv('KEYCLOAK_SERVER')}/realms/{os.getenv('KEYCLOAK_REALM')}/protocol/openid-connect/userinfo",
+        "issuer": f"{os.getenv("KEYCLOAK_SERVER")}/realms/{os.getenv("KEYCLOAK_REALM")}",
         "redirect_uris": [
             f"{os.getenv('CALLBACK_URL')}"
         ]
