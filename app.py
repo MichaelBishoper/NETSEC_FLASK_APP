@@ -18,7 +18,7 @@ client_secrets = {
         "userinfo_uri": f"{os.getenv('KEYCLOAK_SERVER')}/realms/{os.getenv('KEYCLOAK_REALM')}/protocol/openid-connect/userinfo",
         "issuer": f"{os.getenv("KEYCLOAK_SERVER")}/realms/{os.getenv("KEYCLOAK_REALM")}",
         "redirect_uris": [
-            f"{os.getenv('CALLBACK_URL')}"
+            f"{os.getenv("CALLBACK_URL")}"
         ]
     }
 }
@@ -33,7 +33,8 @@ app.config.update({
     'OIDC_ID_TOKEN_COOKIE_SECURE': False,
     'OIDC_USER_INFO_ENABLED': True,
     'OIDC_SCOPES': ['openid', 'email', 'profile'],
-    'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post'
+    'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post',
+    'OVERWRITE_REDIRECT_URI': f"{os.getenv("CALLBACK_URL")}"
 })
 
 oidc = OpenIDConnect(app)
