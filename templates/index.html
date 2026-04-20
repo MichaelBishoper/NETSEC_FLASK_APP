@@ -13,21 +13,9 @@
     <div class="logo-container">
         <img src="{{ url_for('static', filename='images/sgu_logop.png') }}" class="sgu-logo" alt="sgu logo">
     </div>
-    <h1 class="title">Welcome to the SGU Portal</h1>
+    <h1 class="title">Welcome to the SGU Portal, please click the link below to sign in</h1>
     <div class="container">
-    <form action="">
-        <div class="username">
-            <label for="username">Username: </label>
-            <input type="text" id="username" name="password" required>
-        </div>
-        <div class="password">
-            <label for="password">Password: </label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div class="submit">
-            <input type="submit" value="Log In">
-        </div>
-    </form>
+    <a href="{{ url_for('protected') }}" class="login-btn">Login with SSO</a>
     </div>
     
 </body>
