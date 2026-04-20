@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Flask, render_template, redirect, url_for, g, jsonify
+from flask import Flask, render_template, redirect, url_for, request
 from dotenv import load_dotenv
 from flask_oidc import OpenIDConnect
 
@@ -35,13 +35,12 @@ app.config.update({
     'OIDC_SCOPES': ['openid', 'email', 'profile'],
     'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post',
     'OIDC_CALLBACK_ROUTE': '/oidc/callback',
-    'OIDC_OVERWRITE_REDIRECT_URI': f"{os.getenv('CALLBACK_URL')}",
+    'OVERWRITE_REDIRECT_URI': f"{os.getenv('CALLBACK_URL')}",
 })
 
 oidc = OpenIDConnect(app)
 
 # Routes
-
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -58,6 +57,14 @@ def debug_groups():
     <p>Full user_info: {user_info}</p>
     <a href="/protected">Back to protected</a>
     """
+    
+@app.route('/oidc/callback')
+def oidc_callback_debug():
+    """Debug to see if callback is being hit."""
+    print("=== CALLBACK WAS HIT ===")
+    print(f"Request args: {request.args}")
+    print(f"Request url: {request.url}")
+    return "Callback received! Check your logs."
 
 @app.route('/protected')
 @oidc.require_login
