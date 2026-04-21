@@ -77,6 +77,7 @@ def protected():
     if 'students' in user_groups:
         print("Redirecting to student")
         return redirect(url_for('student'))
+    
     elif 'faculty' in user_groups:
         print("Redirecting to faculty")
         return redirect(url_for('faculty'))
@@ -90,16 +91,18 @@ def protected():
 
 @app.route('/student')
 def student():
-    user_info = oidc.user_getinfo(['preferred_username', 'name', 'email'])
-    return render_template('student.html')
+    user_info = oidc.user_getinfo(['preferred_username', 'name', 'email', 'groups'])
+    return render_template('student.html', user=user_info)
 
 @app.route('/faculty')
 def faculty():
-    return render_template('faculty.html')
+    user_info = oidc.user_getinfo(['preferred_username', 'name', 'email', 'groups'])
+    return render_template('faculty.html', user=user_info)
 
 @app.route('/admin')
 def admin():
-    return render_template('admin.html')
+    user_info = oidc.user_getinfo(['preferred_username', 'name', 'email', 'groups'])
+    return render_template('admin.html', user=user_info)
 
 @app.route('/logout')
 def logout():
