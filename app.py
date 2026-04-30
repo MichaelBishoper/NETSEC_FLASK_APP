@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, session
 from dotenv import load_dotenv
 from flask_oidc import OpenIDConnect
 
@@ -113,13 +113,17 @@ def debug_session():
 @app.route('/logout')
 def logout():
 
+    id_token = session['oidc_auth_token']['id_token']
+
     logout_url = (
         f"{os.getenv('KEYCLOAK_SERVER')}"
         f"/realms/{os.getenv('KEYCLOAK_REALM')}"
         f"/protocol/openid-connect/logout"
-        f"?client_id={os.getenv('CLIENT_ID')}"
+        f"?id_token_hint={id_token}"
         f"&post_logout_redirect_uri=http://146.190.108.128/"
     )
+
+    session.clear()
 
     return redirect(logout_url)
     
