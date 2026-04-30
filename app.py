@@ -107,8 +107,6 @@ def admin():
 @app.route('/logout')
 def logout():
 
-    oidc.logout()
-
     logout_url = (
         f"{os.getenv('KEYCLOAK_SERVER')}"
         f"/realms/{os.getenv('KEYCLOAK_REALM')}"
