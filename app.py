@@ -104,6 +104,12 @@ def admin():
     user_info = oidc.user_getinfo(['preferred_username', 'name', 'email', 'groups'])
     return render_template('admin.html', user=user_info)
 
+# this was used for the logout debugging please ignore
+@app.route('/debug-session')
+def debug_session():
+    from flask import session
+    return str(dict(session))
+
 @app.route('/logout')
 def logout():
 
