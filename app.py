@@ -109,14 +109,15 @@ def logout():
 
     oidc.logout()
 
-    keycloak_logout_url = (
+    logout_url = (
         f"{os.getenv('KEYCLOAK_SERVER')}"
         f"/realms/{os.getenv('KEYCLOAK_REALM')}"
         f"/protocol/openid-connect/logout"
-        f"?post_logout_redirect_uri=http://146.190.108.128/"
+        f"?client_id={os.getenv('CLIENT_ID')}"
+        f"&post_logout_redirect_uri=http://146.190.108.128/"
     )
 
-    return redirect(keycloak_logout_url)
+    return redirect(logout_url)
     
 if __name__ == "__main__":
     app.run()
